@@ -1,17 +1,22 @@
+import ky from "ky";
 import { Product } from "./types/product";
-import { useFetch } from "./hooks/useFetch";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Products() {
   const {
     data: products,
     error,
-    loading,
-  } = useFetch<Product[]>({
-    url: "http://localhost:3001/products",
+    isLoading,
+  } = useQuery<Product[]>({
+    queryFn: async () => {
+      return ky("http://localhost:3001/products").json();
+    },
+    queryKey: ["products"],
+    staleTime: Infinity,
   });
 
   if (error) throw error;
-  if (loading) return <h1>Loading...</h1>;
+  if (isLoading) return <h1>Loading...</h1>;
   if (!products) return <h1>No products found.</h1>;
 
   return (
