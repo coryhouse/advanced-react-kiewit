@@ -1,19 +1,7 @@
-import ky from "ky";
-import { Product } from "./types/product";
-import { useQuery } from "@tanstack/react-query";
+import { useProducts } from "./hooks/useProducts";
 
 export default function Products() {
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useQuery<Product[]>({
-    queryFn: async () => {
-      return ky("http://localhost:3001/products").json();
-    },
-    queryKey: ["products"],
-    staleTime: Infinity,
-  });
+  const { data: products, error, isLoading } = useProducts();
 
   if (error) throw error;
   if (isLoading) return <h1>Loading...</h1>;
