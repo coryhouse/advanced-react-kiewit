@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Product } from "./types/product";
+import { Product, productSchema } from "./types/product";
+import { z } from "zod";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -8,8 +9,7 @@ function App() {
   useEffect(() => {
     async function getProducts() {
       const resp = await fetch("http://localhost:3001/products");
-      // Hey TypeScript, this is an array of Product objects. Trust me!
-      const data = (await resp.json()) as Product[];
+      const data = z.array(productSchema).parse(await resp.json());
       setProducts(data);
     }
     getProducts();
