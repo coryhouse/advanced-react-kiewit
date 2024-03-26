@@ -1,8 +1,7 @@
-import "./App.css";
 import { Product } from "./types/product";
 import { useFetch } from "./hooks/useFetch";
 
-function App() {
+export default function Products() {
   const {
     data: products,
     error,
@@ -26,5 +25,3 @@ function App() {
     </>
   );
 }
-
-export default App;
