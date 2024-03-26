@@ -1,28 +1,19 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import { Product, productSchema } from "./types/product";
-import { z } from "zod";
-import ky from "ky";
+import { Product } from "./types/product";
+import { useFetch } from "./hooks/useFetch";
 
 function App() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    async function getProducts() {
-      try {
-        const resp = await ky("http://localhost:3001/products").json();
-        const data = z.array(productSchema).parse(resp);
-        setProducts(data);
-      } catch (err) {
-        // TODO: Handle error in a type safe manner
-        setError(err as Error);
-      }
-    }
-    getProducts();
-  }, []);
+  const {
+    data: products,
+    error,
+    loading,
+  } = useFetch<Product[]>({
+    url: "http://localhost:3001/products",
+  });
 
   if (error) throw error;
+  if (loading) return <h1>Loading...</h1>;
+  if (!products) return <h1>No products found.</h1>;
 
   return (
     <>
