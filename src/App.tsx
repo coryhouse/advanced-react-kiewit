@@ -6,15 +6,23 @@ import ky from "ky";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function getProducts() {
-      const resp = await ky("http://localhost:3001/products").json();
-      const data = z.array(productSchema).parse(resp);
-      setProducts(data);
+      try {
+        const resp = await ky("http://localhost:3001/products").json();
+        const data = z.array(productSchema).parse(resp);
+        setProducts(data);
+      } catch (err) {
+        // TODO: Handle error in a type safe manner
+        setError(err as Error);
+      }
     }
     getProducts();
   }, []);
+
+  if (error) throw error;
 
   return (
     <>
