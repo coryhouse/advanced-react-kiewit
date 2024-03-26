@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Product, productSchema } from "./types/product";
 import { z } from "zod";
+import ky from "ky";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     async function getProducts() {
-      const resp = await fetch("http://localhost:3001/products");
-      const data = z.array(productSchema).parse(await resp.json());
+      const resp = await ky("http://localhost:3001/products").json();
+      const data = z.array(productSchema).parse(resp);
       setProducts(data);
     }
     getProducts();
