@@ -2,11 +2,16 @@ import { Link, Route, Routes } from "react-router-dom";
 import Products from "./Products";
 import { About } from "./About";
 import { Admin } from "./Admin";
-import { useState } from "react";
-import { Product } from "./types/product";
+import { Product, productSchema } from "./types/product";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import { z } from "zod";
 
 export function App() {
-  const [cart, setCart] = useState<Product[]>([]);
+  const [cart, setCart] = useLocalStorage<Product[]>(
+    "cart",
+    [],
+    z.array(productSchema)
+  );
 
   return (
     <>
@@ -27,7 +32,7 @@ export function App() {
         </ul>
       </nav>
       <Routes>
-        <Route path="/" element={<Products setCart={setCart} />} />
+        <Route path="/" element={<Products setCart={setCart} cart={cart} />} />
         <Route path="/about" Component={About} />
         <Route path="/admin" Component={Admin} />
       </Routes>

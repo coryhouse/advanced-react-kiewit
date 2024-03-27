@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useProducts } from "./hooks/useProducts";
 import { useSearchParams } from "react-router-dom";
 import { Product } from "./types/product";
@@ -11,7 +10,8 @@ import { Product } from "./types/product";
 // 5. Can't share the URL.
 
 type ProductsProps = {
-  setCart: React.Dispatch<React.SetStateAction<Product[]>>;
+  cart: Product[];
+  setCart: (cart: Product[]) => void;
 };
 
 export default function Products(props: ProductsProps) {
@@ -56,7 +56,7 @@ export default function Products(props: ProductsProps) {
                 <td>
                   <button
                     onClick={() => {
-                      props.setCart((cart) => [...cart, product]);
+                      props.setCart([...props.cart, product]);
                     }}
                   >
                     Add to cart
