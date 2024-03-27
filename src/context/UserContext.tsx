@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { User } from "../types/user";
 
 const UserContext = createContext<User | undefined>(undefined);
@@ -14,4 +14,12 @@ export function UserContextProvider(props: UserContextProviderProps) {
       {props.children}
     </UserContext.Provider>
   );
+}
+
+export function useUserContext() {
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUserContext must be used within a UserContextProvider");
+  }
+  return context;
 }
