@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useProducts } from "./hooks/useProducts";
+import { useSearchParams } from "react-router-dom";
 
 // Issues:
 // 1. Only searches name
@@ -10,7 +11,9 @@ import { useProducts } from "./hooks/useProducts";
 
 export default function Products() {
   const { data: products = [], isLoading } = useProducts();
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const search = searchParams.get("search") ?? "";
 
   if (isLoading) return <h1>Loading...</h1>;
 
@@ -26,7 +29,7 @@ export default function Products() {
       <input
         type="search"
         placeholder="Search..."
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => setSearchParams({ search: e.target.value })}
       />
       {matchingProducts.length > 0 ? (
         <table>
