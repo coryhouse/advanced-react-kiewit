@@ -32,7 +32,7 @@ export function Nav({ cart }: NavProps) {
           Hi {snap.user.name}.{" "}
           <button
             onClick={() => {
-              snap.user = null;
+              userState.user = null;
             }}
           >
             Logout
