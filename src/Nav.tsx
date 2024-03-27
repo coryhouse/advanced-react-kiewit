@@ -7,7 +7,7 @@ type NavProps = {
 };
 
 export function Nav({ cart }: NavProps) {
-  const user = useUserContext();
+  const { user, setUser } = useUserContext();
 
   return (
     <nav>
@@ -26,9 +26,11 @@ export function Nav({ cart }: NavProps) {
         </li>
       </ul>
 
-      <p>
-        Hi {user.name}. <button>Logout</button>
-      </p>
+      {user && (
+        <p>
+          Hi {user.name}. <button onClick={() => setUser(null)}>Logout</button>
+        </p>
+      )}
     </nav>
   );
 }

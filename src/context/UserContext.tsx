@@ -1,17 +1,27 @@
-import { createContext, useContext } from "react";
+import { Dispatch, SetStateAction, createContext, useContext } from "react";
 import { User } from "../types/user";
 
-const UserContext = createContext<User | undefined>(undefined);
+type UserContextType = {
+  user: User | null;
+  setUser: Dispatch<SetStateAction<User | null>>;
+};
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
 type UserContextProviderProps = {
   children: React.ReactNode;
-  user: User;
+  user: User | null;
+  setUser: Dispatch<SetStateAction<User | null>>;
 };
 
-export function UserContextProvider(props: UserContextProviderProps) {
+export function UserContextProvider({
+  user,
+  setUser,
+  children,
+}: UserContextProviderProps) {
   return (
-    <UserContext.Provider value={props.user}>
-      {props.children}
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
     </UserContext.Provider>
   );
 }

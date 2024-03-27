@@ -16,7 +16,7 @@ export function App() {
     [],
     z.array(productSchema)
   );
-  const [user, setUser] = useState<User>({
+  const [user, setUser] = useState<User | null>({
     id: 1,
     name: "John Doe",
     email: "john@doe.com",
@@ -24,7 +24,7 @@ export function App() {
   });
 
   return (
-    <UserContextProvider user={user}>
+    <UserContextProvider user={user} setUser={setUser}>
       <Nav cart={cart} />
       <Routes>
         <Route path="/" element={<Products setCart={setCart} cart={cart} />} />
