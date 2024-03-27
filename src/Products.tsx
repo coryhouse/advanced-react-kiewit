@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useProducts } from "./hooks/useProducts";
 import { useSearchParams } from "react-router-dom";
+import { Product } from "./types/product";
 
 // Issues:
 // 1. Only searches name
@@ -8,7 +10,11 @@ import { useSearchParams } from "react-router-dom";
 // 4. Didn't display a message if no products found.
 // 5. Can't share the URL.
 
-export default function Products() {
+type ProductsProps = {
+  setCart: React.Dispatch<React.SetStateAction<Product[]>>;
+};
+
+export default function Products(props: ProductsProps) {
   const { data: products = [], isLoading } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -29,6 +35,7 @@ export default function Products() {
         type="search"
         placeholder="Search..."
         onChange={(e) => setSearchParams({ search: e.target.value })}
+        value={search} // React controls the input. It's a controlled component.
       />
       {matchingProducts.length > 0 ? (
         <table>
@@ -37,6 +44,7 @@ export default function Products() {
               <th>Category</th>
               <th>Name</th>
               <th>Price</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -45,6 +53,15 @@ export default function Products() {
                 <td>{product.category}</td>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      props.setCart((cart) => [...cart, product]);
+                    }}
+                  >
+                    Add to cart
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
