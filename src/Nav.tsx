@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { Product } from "./types/product";
-import { useUserContext } from "./context/UserContext";
+import { useStore } from "./store/store";
 
 type NavProps = {
   cart: Product[];
 };
 
 export function Nav({ cart }: NavProps) {
-  const { user, setUser } = useUserContext();
+  const { user, logout } = useStore();
 
   return (
     <nav>
@@ -28,7 +28,7 @@ export function Nav({ cart }: NavProps) {
 
       {user && (
         <p>
-          Hi {user.name}. <button onClick={() => setUser(null)}>Logout</button>
+          Hi {user.name}. <button onClick={logout}>Logout</button>
         </p>
       )}
     </nav>
