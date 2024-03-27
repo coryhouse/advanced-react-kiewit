@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { Product } from "./types/product";
-import { useUserContext } from "./context/UserContext";
+import { useSnapshot } from "valtio";
+import { userState } from "./state/userState";
 
 type NavProps = {
   cart: Product[];
 };
 
 export function Nav({ cart }: NavProps) {
-  const { user, setUser } = useUserContext();
+  const snap = useSnapshot(userState);
 
   return (
     <nav>
@@ -26,9 +27,16 @@ export function Nav({ cart }: NavProps) {
         </li>
       </ul>
 
-      {user && (
+      {snap.user && (
         <p>
-          Hi {user.name}. <button onClick={() => setUser(null)}>Logout</button>
+          Hi {snap.user.name}.{" "}
+          <button
+            onClick={() => {
+              snap.user = null;
+            }}
+          >
+            Logout
+          </button>
         </p>
       )}
     </nav>
