@@ -8,7 +8,14 @@ import { About } from "./About.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Admin } from "./Admin.tsx";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      throwOnError: true,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

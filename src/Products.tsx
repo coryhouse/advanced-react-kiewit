@@ -1,9 +1,8 @@
 import { useProducts } from "./hooks/useProducts";
 
 export default function Products() {
-  const { data: products, error, isLoading } = useProducts();
+  const { data: products, isLoading } = useProducts();
 
-  if (error) throw error;
   if (isLoading) return <h1>Loading...</h1>;
   if (!products) return <h1>No products found.</h1>;
 
