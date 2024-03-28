@@ -4,6 +4,11 @@ import { Product } from "../types/product";
 const url = "http://localhost:3001/products";
 
 export const scenarios = {
+  empty: [
+    http.get(url, () => {
+      return HttpResponse.json([]);
+    }),
+  ],
   error: [
     http.get(url, () => {
       return new HttpResponse(null, { status: 500 });

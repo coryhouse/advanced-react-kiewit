@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test("should support product search and add to cart", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("http://localhost:3000/?scenario=success");
 
   // Assure products display
   await expect(page.getByText("Product 1")).toBeVisible();
@@ -21,4 +21,16 @@ test("should support product search and add to cart", async ({ page }) => {
 
   // Now the cart nav link should show 1 item
   await expect(page.getByRole("link", { name: "Cart (1)" })).toBeVisible();
+});
+
+test("should display a message when no products exist", async ({ page }) => {
+  await page.goto("http://localhost:3000/?scenario=empty");
+  await expect(page.getByText("No products found.")).toBeVisible();
+});
+
+test("should display an error message when the backend throws a 500", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:3000/?scenario=error");
+  await expect(page.getByText("Oops! An error occurred.")).toBeVisible();
 });
