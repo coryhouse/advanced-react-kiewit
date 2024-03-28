@@ -1,7 +1,11 @@
 import { test, expect } from "@playwright/test";
 
 test("should support product search and add to cart", async ({ page }) => {
-  await page.goto("http://localhost:3000/?scenario=success");
+  await page.goto("http://localhost:3000/?scenario=success&delay=200");
+
+  // Should show the loading message then hide it.
+  await expect(page.getByText("Loading...")).toBeVisible();
+  await expect(page.getByText("Loading...")).toBeHidden();
 
   // Assure products display
   await expect(page.getByText("Product 1")).toBeVisible();

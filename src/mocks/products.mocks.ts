@@ -1,4 +1,4 @@
-import { HttpResponse, http } from "msw";
+import { HttpResponse, delay, http } from "msw";
 import { Product } from "../types/product";
 
 const url = "http://localhost:3001/products";
@@ -15,7 +15,7 @@ export const scenarios = {
     }),
   ],
   success: [
-    http.get(url, () => {
+    http.get(url, async () => {
       const mockProducts: Product[] = [
         {
           id: 1,
@@ -45,7 +45,10 @@ export const scenarios = {
           skus: [],
         },
       ];
-
+      const responseDelay = parseInt(
+        new URLSearchParams(window.location.search).get("delay") ?? "0"
+      );
+      await delay(responseDelay);
       return HttpResponse.json(mockProducts);
     }),
   ],
