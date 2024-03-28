@@ -55,6 +55,7 @@ export default function Products(props: ProductsProps) {
                 <td>{product.price}</td>
                 <td>
                   <button
+                    aria-label={`Add ${product.name} to cart`}
                     onClick={() => {
                       props.setCart([...props.cart, product]);
                     }}
