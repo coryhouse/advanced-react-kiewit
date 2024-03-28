@@ -15,14 +15,23 @@ const queryClient = new QueryClient({
   },
 });
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <ErrorBoundary fallback={<h1>Oops! An error occurred.</h1>}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ErrorBoundary>
-  </React.StrictMode>
-);
+async function enableMocking() {
+  if (import.meta.env.VITE_ENABLE_MOCKS === "true") {
+    const { worker } = await import("./mocks/browser");
+    return worker.start();
+  }
+}
+
+enableMocking().then(() => {
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+      <ErrorBoundary fallback={<h1>Oops! An error occurred.</h1>}>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+});
