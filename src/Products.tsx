@@ -1,6 +1,7 @@
 import { useProducts } from "./hooks/useProducts";
 import { useSearchParams } from "react-router-dom";
 import { Product } from "./types/product";
+import { useRef } from "react";
 
 // Issues:
 // 1. Only searches name
@@ -17,6 +18,8 @@ type ProductsProps = {
 export default function Products(props: ProductsProps) {
   const { data: products = [], isLoading } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const searchHistoryRef = useRef<string[]>([]);
 
   const search = searchParams.get("search") ?? "";
 
@@ -31,12 +34,26 @@ export default function Products(props: ProductsProps) {
   return (
     <>
       <h1>Products</h1>
+      <button onClick={() => inputRef.current?.focus()}>Focus search</button>
+      <br />
       <input
+        ref={inputRef}
         type="search"
         placeholder="Search..."
-        onChange={(e) => setSearchParams({ search: e.target.value })}
+        onChange={(e) => {
+          searchHistoryRef.current.push(e.target.value);
+          setSearchParams({ search: e.target.value });
+        }}
         value={search} // React controls the input. It's a controlled component.
       />
+      <button
+        onClick={() => {
+          const previousSearch = searchHistoryRef.current.pop()!;
+          setSearchParams({ search: previousSearch });
+        }}
+      >
+        Apply Previous Search
+      </button>
       {matchingProducts.length > 0 ? (
         <table>
           <thead>
